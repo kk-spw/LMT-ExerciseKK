@@ -17,7 +17,13 @@ Limited internet access - access only to package repositories (standard).
 Ansible is already configured on the target hosts and can perform privilege escalation.
 
 **Notes:**
-Variable definitions where showcased in different way that might not be optimal "Best Practice", but showcase the exercise implementation variations. 
+
+ - Variable definitions where showcased in different way that might not
+   be optimal "Best Practice", but showcase the exercise implementation
+   variations. 
+   
+ - The implementation is for Debian based systems using APT package
+   manager
 
 ## Task definition
 
@@ -60,7 +66,7 @@ Edit global_vars with required variable data of the test environment:
     vim group_vars/DC_ZZZ_demoservers
     vim group_vars/generic.yml
 Run the Ansible Playbooks of the corresponding tasks:
-Task 1: observer password output for the created user
+Task 1: *observer password output for the created user*
 
     ansible-playbook 001_generic_user_add_sudoers.conf.j2
 
