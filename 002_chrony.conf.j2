@@ -10,7 +10,7 @@
 
   - name: deploy chrony.conf template
     template:
-      src: ./templates/chrony.conf
+      src: ./templates/chrony.conf.j2
       dest: /etc/chrony/chrony.conf
       owner: root
       group: root
