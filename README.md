@@ -11,10 +11,13 @@ The goal is to perform three automation tasks on linux servers located in two da
 	 - Host: hostname5
 
 Constraints: 
-Limited internet access - access only to package repositories (standard)
+Limited internet access - access only to package repositories (standard).
 
 **General assumptions:** 
-Ansible is already configured on the target hosts and can perform privilege escalation
+Ansible is already configured on the target hosts and can perform privilege escalation.
+
+**Notes:**
+Variable definitions where showcased in different way that might not be optimal "Best Practice", but showcase the exercise implementation variations. 
 
 ## Task definition
 
