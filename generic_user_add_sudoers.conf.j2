@@ -1,0 +1,51 @@
+---
+- name: User management
+  hosts: all
+  become: true
+  vars_files:
+    - ./group_vars/generic.yml
+  tasks:
+    - name: Install makepasswd
+      apt:
+        name: makepasswd
+        state: present
+      when: ansible_os_family == 'Debian' or ansible_os_family == 'Ubuntu'
+
+    - name: Install mkpasswd (whois)
+      apt:
+        name: whois
+        state: present
+      when: ansible_os_family == 'Debian' or ansible_os_family == 'Ubuntu'
+
+    - name: Generate password for new user
+      shell: makepasswd --chars=20
+      register: user_password
+
+    - name: Generate encrypted password
+      shell: mkpasswd --method=SHA-512 {{ user_password.stdout }}
+      register: encrypted_user_password
+
+    - name: Add {{ generic_sudo_user_with_pwd }} user
+      user:
+        name: "{{ generic_sudo_user_with_pwd }}"
+        groups: sudo
+        append: true
+        state: present
+        createhome: true
+        shell: "/bin/bash"
+        update_password: always
+        password: "{{ encrypted_user_password.stdout }}"
+      register: user_created
+
+    - name: Force user to change password
+      shell: chage -d 0 {{ generic_sudo_user_with_pwd }}
+
+    - name: Enable sudo with password for {{ generic_sudo_user_with_pwd }} user
+      copy:
+        dest: /etc/sudoers.d/10-sudo-user
+        content: "{{ generic_sudo_user_with_pwd }} ALL=(ALL) ALL"
+        mode: 0440
+
+    - name: User created
+      debug: msg="Password for {{ generic_sudo_user_with_pwd }} is {{ user_password.stdout }}"
+      when: user_created.changed
