@@ -3,20 +3,26 @@
   gather_facts: yes
 
   tasks:
-  - name: Install zabbix agent
+  - name: Remove old zabbix agent
     become: yes
     apt:
       name: zabbix-agent
+      state: absent
+
+  - name: Install zabbix agent2
+    become: yes
+    apt:
+      name: zabbix-agent2
       state: present
       update_cache: yes
 
-  - name: Stop service zabbix-agent
+  - name: Stop service zabbix-agent2
     become: yes
     service:
-      name: zabbix-agent
+      name: zabbix-agent2
       state: stopped
 
-  - name: Remove zabbix config file
+  - name: Remove old zabbix config file
     become: yes
     file:
       path: /etc/zabbix/zabbix_agentd.conf
@@ -26,7 +32,7 @@
     become: yes
     template:
       src: ./templates/zabbix_agent2.conf.j2
-      dest: /etc/zabbix/zabbix_agentd.conf
+      dest: /etc/zabbix/zabbix_agent2.conf
       owner: root
       group: root
       mode: 0644
@@ -35,5 +41,5 @@
   - name: Start service zabbix-agent
     become: yes
     service:
-      name: zabbix-agent
+      name: zabbix-agent2
       state: started
